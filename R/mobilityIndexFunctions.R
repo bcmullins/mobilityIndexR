@@ -68,14 +68,15 @@ makeShorrocks <- function(dat, rank1, rank2){
   # dat - data.frame
   # rank1 - string
   # rank2 - string
-  n <- max(max(dat[[rank1]]), max(dat[[rank2]]))
+  ranks <- unique(dat[[rank1]])
+  n <- length(ranks)
   r_num <- c()
   r_den <- c()
   q <- c()
-  for (i in 0:n){
-    r_num[i+1] <- nrow(subset(dat, dat[[rank1]] == i && dat[[rank2]] == i))
-    r_den[i+1] <- nrow(subset(dat, dat[[rank1]] == i))
-    q[i+1] <- r_num[i+1] / r_den[i+1]
+  for (i in 1:n){
+    r_num[i] <- nrow(subset(dat, dat[[rank1]] == ranks[i] && dat[[rank2]] == ranks[i]))
+    r_den[i] <- nrow(subset(dat, dat[[rank1]] == ranks[i]))
+    q[i] <- r_num[i] / r_den[i]
   }
   value <- (n - sum(q))/(n-1)
   return(value)
@@ -84,15 +85,15 @@ makeShorrocks <- function(dat, rank1, rank2){
 makeIndex <- function(dat, rank_x, rank_y, index){
   if (index == 'prais-bibby') {
     value <- makePraisBibby(dat, rank_x, rank_y)
-    return(list(index = value))
+    return(list('prais-bibby' = value))
   }
   else if (index == 'average-movement') {
     value <- makeAverageMovement(dat, rank_x, rank_y)
-    return(list(index = value))
+    return(list('average-movement' = value))
   }
   else if (index == 'shorrocks') {
     value <- makeShorrocks(dat, rank_x, rank_y)
-    return(list(index = value))
+    return(list('shorrocks' = value))
   }
   else if (index == 'origin-specific') {
     total_top <- makeOriginSpecific(dat, rank_x, rank_y, 'top', 'total')
@@ -100,12 +101,12 @@ makeIndex <- function(dat, rank_x, rank_y, index){
     total_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'total')
     far_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'far')
     total_exclude <- makeOriginSpecific(dat, rank_x, rank_y, 'exclude', 'total')
-    value <- list('total_top' = total_top,
-                  'far_top' = far_top,
-                  'total_bottom' = total_bottom,
-                  'far_bottom' = far_bottom,
-                  'total_exclude' = total_exclude)
-    return(list(index = value))
+    value <- list('os_total_top' = total_top,
+                  'os_far_top' = far_top,
+                  'os_total_bottom' = total_bottom,
+                  'os_far_bottom' = far_bottom,
+                  'os_total_exclude' = total_exclude)
+    return(value)
   }
   else (stop('Not a supported index! See the mobilityIndexR::getIndices documentation.'))
 }
@@ -139,8 +140,11 @@ getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ran
     indices <- c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific')
   }
   for (index in indices){
+    if (!(index %in% c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific'))){
+      stop(paste('Index', index, 'not supported.'))
+    }
     value <- makeIndex(dat = df, rank_x = 'rank_x', rank_y = 'rank_y', index = index)
-    output <- append(output, list(index = value))
+    output <- c(output, value)
   }
   return(output)
 }
