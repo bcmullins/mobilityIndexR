@@ -26,12 +26,17 @@ if FALSE, values in transition matrix are counts}
 
 \item{bounds}{a sequence of numeric bounds for defining absolute transition matrix ranks}
 
-\item{strict}{logical.}
+\item{strict}{logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
+transition matrix calculated by slightly jittering the values to ensure uniqueness.}
 }
 \value{
-Returns transition matrix as a Matrix
+Returns list with the transition matrix as a Matrix and vectors with the bounds corresponding to the ranks.
 }
 \description{
 Returns transition matrix from two columns in dataset. Supports relative, mixed,
 and absolute transition matrices.
+}
+\examples{
+data(incomeMobility)
+getTMatrix(dat = incomeMobility, col_x = 't0', col_y = 't3', type = 'relative', num_ranks = 5)
 }

@@ -1,4 +1,4 @@
-getPraisBibby <- function(dat, rank1, rank2){
+makePraisBibby <- function(dat, rank1, rank2){
   # Calculates Prais-Bibby Index for a dataset using rank1 and rank2
   # dat - data.frame
   # rank1 - string
@@ -8,7 +8,7 @@ getPraisBibby <- function(dat, rank1, rank2){
   return(numerator/denominator)
 }
 
-getAverageMovement <- function(dat, rank1, rank2){
+makeAverageMovement <- function(dat, rank1, rank2){
   # Calculates Average Movement Index for a dataset using rank1 and rank2
   # dat - data.frame
   # rank1 - string
@@ -17,7 +17,7 @@ getAverageMovement <- function(dat, rank1, rank2){
   return(mean(movement))
 }
 
-getOriginSpecific <- function(dat, rank1, rank2, where, variety = 'total'){
+makeOriginSpecific <- function(dat, rank1, rank2, where, variety){
   # Computes one of several different origin specific indices depending on location and variety
   # dat - data.frame
   # rank1 - string
@@ -42,33 +42,28 @@ getOriginSpecific <- function(dat, rank1, rank2, where, variety = 'total'){
   }
   else if (where == 'bottom'){
     if (variety == 'total'){
-      num <- nrow(subset(dat, dat[[rank1]] == 2 & dat[[rank2]] > 2))
-      den <- nrow(subset(dat, dat[[rank1]] == 2))
+      num <- nrow(subset(dat, dat[[rank1]] == 1 & dat[[rank2]] > 1))
+      den <- nrow(subset(dat, dat[[rank1]] == 1))
       value <- num / den
       return(1 - value)
     } else if (variety == 'far') {
-      num <- nrow(subset(dat, dat[[rank1]] == 2 & dat[[rank2]] > 3))
-      den <- nrow(subset(dat, dat[[rank1]] == 2))
+      num <- nrow(subset(dat, dat[[rank1]] == 1 & dat[[rank2]] > 2))
+      den <- nrow(subset(dat, dat[[rank1]] == 1))
       value <- num / den
       return(1 - value)
     } else stop("Not a valid variety! Use total or far!")
   }
-  else if (where == 'zero'){
+  else if (where == 'exclude'){
     if (variety == 'total'){
       num <- nrow(subset(dat, dat[[rank1]] == 0 & dat[[rank2]] > 0))
       den <- nrow(subset(dat, dat[[rank1]] == 0))
       value <- num / den
       return(1 - value)
-    } else if (variety == 'far') {
-      num <- nrow(subset(dat, dat[[rank1]] == 0 & dat[[rank2]] > 1))
-      den <- nrow(subset(dat, dat[[rank1]] == 0))
-      value <- num / den
-      return(1 - value)
-    } else stop("Not a valid variety! Use total or far!")
-  } else stop("Not a valid where argument! Use top, bottom, or zero!")
+    } else stop("Not a valid variety! Only total is used with the exclude value!")
+  } else stop("Not a valid where argument! Use top, bottom, or exclude!")
 }
 
-getShorrocks <- function(dat, rank1, rank2){
+makeShorrocks <- function(dat, rank1, rank2){
   # Calculates the Shorrocks Index for a dataset using rank1 and rank2
   # dat - data.frame
   # rank1 - string
@@ -86,57 +81,66 @@ getShorrocks <- function(dat, rank1, rank2){
   return(value)
 }
 
-getIndex <- function(dat, rel1, rel2, mixed2, index, type){
-  # This function is a wrapper for all of the index functions. You pass in the the data, the index name,
-  # and whether it is relative or mixed and the index is returned.
-  # dat - data.frame
-  # rel1 - string - name of relative ranking column at time 1
-  # rel2 - string - name of relative ranking column at time 2
-  # mixed2 - string - name of the mixed ranking column at time 2
-  # index - string - name of the desired index; at present, 'prais-bibby', 'average movement',
-  # 'shorrocks', and 'origin specific' are supported
-  # type - string - indicates if the index is to be calculated as relative or mixed
-  if (index == 'prais-bibby' && type == 'relative'){
-    value <- getPraisBibby(dat, rel1, rel2)
-    return(value)
+makeIndex <- function(dat, rank_x, rank_y, index){
+  if (index == 'prais-bibby') {
+    value <- makePraisBibby(dat, rank_x, rank_y)
+    return(list(index = value))
   }
-  else if (index == 'prais-bibby' && type == 'mixed'){
-    value <- getPraisBibby(dat, rel1, mixed2)
-    return(value)
+  else if (index == 'average-movement') {
+    value <- makeAverageMovement(dat, rank_x, rank_y)
+    return(list(index = value))
   }
-  else if (index == 'average movement' && type == 'relative'){
-    value <- getAverageMovement(dat, rel1, rel2)
-    return(value)
+  else if (index == 'shorrocks') {
+    value <- makeShorrocks(dat, rank_x, rank_y)
+    return(list(index = value))
   }
-  else if (index == 'average movement' && type == 'mixed'){
-    value <- getAverageMovement(dat, rel1, mixed2)
-    return(value)
+  else if (index == 'origin-specific') {
+    total_top <- makeOriginSpecific(dat, rank_x, rank_y, 'top', 'total')
+    far_top <- makeOriginSpecific(dat, rank_x, rank_y, 'top', 'far')
+    total_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'total')
+    far_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'far')
+    total_exclude <- makeOriginSpecific(dat, rank_x, rank_y, 'exclude', 'total')
+    value <- list('total_top' = total_top,
+                  'far_top' = far_top,
+                  'total_bottom' = total_bottom,
+                  'far_bottom' = far_bottom,
+                  'total_exclude' = total_exclude)
+    return(list(index = value))
   }
-  else if (index == 'shorrocks' && type == 'relative'){
-    value <- getShorrocks(dat, rel1, rel2)
-    return(value)
+  else (stop('Not a supported index! See the mobilityIndexR::getIndices documentation.'))
+}
+
+#' Calculates Mobility Indices
+#'
+#' @param dat
+#' @param col_x
+#' @param col_y
+#' @param type
+#' @param indices
+#' @param num_ranks
+#' @param exclude_value
+#' @param bounds
+#' @param strict
+#'
+#' @return
+#' @export
+#'
+#' @examples
+getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, strict = TRUE){
+  df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
+                         num_ranks = num_ranks, exclude_value = exclude_value,
+                         mixed_col = col_x, bounds = bounds, strict = strict)
+  df_rank_y <- makeRanks(dat = dat, col_in = col_y, col_out = 'rank_y', type = type,
+                         num_ranks = num_ranks, exclude_value = exclude_value,
+                         mixed_col = col_x, bounds = bounds, strict = strict)
+  df <- merge(df_rank_x$data, df_rank_y$data, by = 'id')
+  output <- list()
+  if (indices == 'all') {
+    indices <- c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific')
   }
-  else if (index == 'shorrocks' && type == 'mixed'){
-    value <- getShorrocks(dat, rel1, mixed2)
-    return(value)
+  for (index in indices){
+    value <- makeIndex(dat = df, rank_x = 'rank_x', rank_y = 'rank_y', index = index)
+    output <- append(output, list(index = value))
   }
-  else if (index == 'origin specific' && type == 'relative'){
-    total_top_rel <- getOriginSpecific(dat, rel1, rel2, 'top', 'total')
-    total_bottom_rel <- getOriginSpecific(dat, rel1, rel2, 'bottom', 'total')
-    total_zero_rel <- getOriginSpecific(dat, rel1, rel2, 'zero', 'total')
-    far_top_rel <- getOriginSpecific(dat, rel1, rel2, 'top', 'far')
-    far_bottom_rel <- getOriginSpecific(dat, rel1, rel2, 'bottom', 'far')
-    far_zero_rel <- getOriginSpecific(dat, rel1, rel2, 'zero', 'far')
-    return(data.frame(total_top_rel, total_bottom_rel, total_zero_rel, far_top_rel, far_bottom_rel, far_zero_rel))
-  }
-  else if (index == 'origin specific' && type == 'mixed'){
-    total_top_mix <- getOriginSpecific(dat, rel1, mixed2, 'top', 'total')
-    total_bottom_mix <- getOriginSpecific(dat, rel1, mixed2, 'bottom', 'total')
-    total_zero_mix <- getOriginSpecific(dat, rel1, mixed2, 'zero', 'total')
-    far_top_mix <- getOriginSpecific(dat, rel1, mixed2, 'top', 'far')
-    far_bottom_mix <- getOriginSpecific(dat, rel1, mixed2, 'bottom', 'far')
-    far_zero_mix <- getOriginSpecific(dat, rel1, mixed2, 'zero', 'far')
-    return(data.frame(total_top_mix, total_bottom_mix, total_zero_mix, far_top_mix, far_bottom_mix, far_zero_mix))
-  }
-  else (stop("Not a supported index!"))
+  return(output)
 }

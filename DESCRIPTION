@@ -1,12 +1,13 @@
 Package: mobilityIndexR
 Type: Package
 Title: Calculates Transition Matrices and Mobility Indices
-Version: 0.1.0
+Version: 0.1.1
 Author: Brett Mullins and Trevor Harkreader
 Maintainer: Brett Mullins <brettcmullins@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: MIT
+Description: blah blah blah
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat (>= 2.1.0)

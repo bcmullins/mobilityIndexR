@@ -115,7 +115,7 @@ makeMixedRanks <- function(dat, col_in, mixed_col, col_out, num_ranks, exclude_v
   return(output)
 }
 
-makeAbsoluteRanks <- function(dat, col_in, col_out, bounds) {
+makeAbsoluteRanks <- function(dat, col_in, col_out, bounds){
   df <- dat[c('id', col_in)]
   num_ranks <- length(bounds) - 1
   df[[col_out]] <- cut(df[[col_in]], breaks = bounds, labels = 1:num_ranks, include.lowest = TRUE)
@@ -164,12 +164,15 @@ makeTMatrix <- function(dat, rank_x, rank_y, probs){
 #' @param num_ranks an integer specifying the number of ranks for a relative or mixed transition matrix
 #' @param exclude_value a single numeric value to relegate to an exclusive bottom rank in the transition matrix
 #' @param bounds a sequence of numeric bounds for defining absolute transition matrix ranks
-#' @param strict logical.
+#' @param strict logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
+#' transition matrix calculated by slightly jittering the values to ensure uniqueness.
 #'
-#' @return Returns transition matrix as a Matrix
+#' @return Returns list with the transition matrix as a Matrix and vectors with the bounds corresponding to the ranks.
 #' @export
 #'
 #' @examples
+#' data(incomeMobility)
+#' getTMatrix(dat = incomeMobility, col_x = 't0', col_y = 't3', type = 'relative', num_ranks = 5)
 getTMatrix <- function(dat, col_x, col_y, type, probs = TRUE, num_ranks, exclude_value, bounds, strict = TRUE){
   df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
                          num_ranks = num_ranks, exclude_value = exclude_value,
