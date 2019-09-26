@@ -74,7 +74,7 @@ makeShorrocks <- function(dat, rank1, rank2){
   r_den <- c()
   q <- c()
   for (i in 1:n){
-    r_num[i] <- nrow(subset(dat, dat[[rank1]] == ranks[i] && dat[[rank2]] == ranks[i]))
+    r_num[i] <- nrow(subset(dat, dat[[rank1]] == ranks[i] & dat[[rank2]] == ranks[i]))
     r_den[i] <- nrow(subset(dat, dat[[rank1]] == ranks[i]))
     q[i] <- r_num[i] / r_den[i]
   }
@@ -111,22 +111,35 @@ makeIndex <- function(dat, rank_x, rank_y, index){
   else (stop('Not a supported index! See the mobilityIndexR::getIndices documentation.'))
 }
 
-#' Calculates Mobility Indices
+#' @title Calculates Mobility Indices for Two Time Periods
 #'
-#' @param dat
-#' @param col_x
-#' @param col_y
-#' @param type
-#' @param indices
-#' @param num_ranks
-#' @param exclude_value
-#' @param bounds
-#' @param strict
+#' @description Calculates desired mobility indices from two columns in dataset. Supports relative, mixed,
+#' and absolute rankings in the calculation of indices.
 #'
-#' @return
+#' @param dat a dataframe in the mobilityIndexR schema
+#' @param col_x a character string denoting the first column to be used in the index calculation
+#' @param col_y a character string denoting the second column to be used in the index calculation
+#' @param type a character string indicating the type of ranking;
+#' accepts 'relative', 'mixed', and 'absolute'
+#' @param indices a vector of character strings indicating which mobility indices are desired;
+#' currently support 'prais-bibby', 'absolute-movement', 'shorrocks', and 'origin-specific'.
+#' The default value is 'all'.
+#' @param num_ranks an integer specifying the number of ranks for a relative or mixed ranking
+#' @param exclude_value a single numeric value to assign exclusively to the zero rank in the column ranking
+#' @param bounds a sequence of numeric bounds for defining absolute ranks
+#' @param strict logical. If TRUE, rankings are calculated from the given values. If FALSE,
+#' rankings are calculated by slightly jittering the values to ensure uniqueness of bounds.
+#'
+#' @return Returns a named list containing the desired index values
 #' @export
 #'
 #' @examples
+#' data(incomeMobility)
+#' getMobilityIndices(dat = incomeMobility,
+#'                    col_x = 't0',
+#'                    col_y = 't2',
+#'                    type = 'relative',
+#'                    num_ranks = 5)
 getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, strict = TRUE){
   df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
                          num_ranks = num_ranks, exclude_value = exclude_value,

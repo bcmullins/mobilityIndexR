@@ -2,14 +2,46 @@
 % Please edit documentation in R/mobilityIndexFunctions.R
 \name{getMobilityIndices}
 \alias{getMobilityIndices}
-\title{Calculates Mobility Indices}
+\title{Calculates Mobility Indices for Two Time Periods}
 \usage{
 getMobilityIndices(dat, col_x, col_y, type, indices = "all", num_ranks,
   exclude_value, bounds, strict = TRUE)
 }
 \arguments{
-\item{strict}{}
+\item{dat}{a dataframe in the mobilityIndexR schema}
+
+\item{col_x}{a character string denoting the first column to be used in the index calculation}
+
+\item{col_y}{a character string denoting the second column to be used in the index calculation}
+
+\item{type}{a character string indicating the type of ranking;
+accepts 'relative', 'mixed', and 'absolute'}
+
+\item{indices}{a vector of character strings indicating which mobility indices are desired;
+currently support 'prais-bibby', 'absolute-movement', 'shorrocks', and 'origin-specific'.
+The default value is 'all'.}
+
+\item{num_ranks}{an integer specifying the number of ranks for a relative or mixed ranking}
+
+\item{exclude_value}{a single numeric value to assign exclusively to the zero rank in the column ranking}
+
+\item{bounds}{a sequence of numeric bounds for defining absolute ranks}
+
+\item{strict}{logical. If TRUE, rankings are calculated from the given values. If FALSE,
+rankings are calculated by slightly jittering the values to ensure uniqueness of bounds.}
+}
+\value{
+Returns a named list containing the desired index values
 }
 \description{
-Calculates Mobility Indices
+Calculates desired mobility indices from two columns in dataset. Supports relative, mixed,
+and absolute rankings in the calculation of indices.
+}
+\examples{
+data(incomeMobility)
+getMobilityIndices(dat = incomeMobility,
+                   col_x = 't0',
+                   col_y = 't2',
+                   type = 'relative',
+                   num_ranks = 5)
 }

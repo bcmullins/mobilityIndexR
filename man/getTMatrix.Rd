@@ -15,19 +15,20 @@ getTMatrix(dat, col_x, col_y, type, probs = TRUE, num_ranks,
 \item{col_y}{a character string denoting the second column to be used in the transition matrix}
 
 \item{type}{a character string indicating the type of transition matrix;
-accepts relative, mixed, and absolute.}
+accepts 'relative', 'mixed', and 'absolute'}
 
 \item{probs}{logical. If TRUE, values in transition matrix are probabilities;
 if FALSE, values in transition matrix are counts}
 
 \item{num_ranks}{an integer specifying the number of ranks for a relative or mixed transition matrix}
 
-\item{exclude_value}{a single numeric value to relegate to an exclusive bottom rank in the transition matrix}
+\item{exclude_value}{a single numeric value to assign exclusively to the zero rank in the transition matrix}
 
 \item{bounds}{a sequence of numeric bounds for defining absolute transition matrix ranks}
 
 \item{strict}{logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
-transition matrix calculated by slightly jittering the values to ensure uniqueness.}
+transition matrix calculated by slightly jittering the values to ensure uniqueness of bounds.
+Only used with relative and mixed types.}
 }
 \value{
 Returns list with the transition matrix as a Matrix and vectors with the bounds corresponding to the ranks.
@@ -38,5 +39,9 @@ and absolute transition matrices.
 }
 \examples{
 data(incomeMobility)
-getTMatrix(dat = incomeMobility, col_x = 't0', col_y = 't3', type = 'relative', num_ranks = 5)
+getTMatrix(dat = incomeMobility,
+           col_x = 't0',
+           col_y = 't3',
+           type = 'relative',
+           num_ranks = 5)
 }
