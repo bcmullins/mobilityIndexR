@@ -1,7 +1,7 @@
 Package: mobilityIndexR
 Type: Package
 Title: Calculates Transition Matrices and Mobility Indices
-Version: 0.1.2
+Version: 0.1.3
 Author: Brett Mullins and Trevor Harkreader
 Maintainer: Brett Mullins <brettcmullins@gmail.com>
 Description: blah blah blah

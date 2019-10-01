@@ -39,7 +39,8 @@ makeRelativeRanks <- function(dat, col_in, col_out, num_ranks, exclude_value, st
       df[[col_in]] <- df[[col_in]] + abs(rnorm(n = nrow(df), mean = 0.0000000000001, 0.0000000001))
     }
     cutoffs <- quantile(df[[col_in]], probs = c(0:num_ranks/num_ranks))
-    df[[col_out]] <- cut(df[[col_in]], breaks = cutoffs, labels = 1:num_ranks, include.lowest = TRUE)
+    df[[col_out]] <- cut(df[[col_in]], breaks = cutoffs, labels = 1:num_ranks, right = FALSE,
+                         include.lowest = TRUE)
     df[[col_out]] <- as.numeric(df[[col_out]])
   } else {
     stopifnot(is.numeric(exclude_value))
@@ -49,7 +50,7 @@ makeRelativeRanks <- function(dat, col_in, col_out, num_ranks, exclude_value, st
     }
     cutoffs <- quantile(control[[col_in]], probs = c(0:num_ranks/num_ranks))
     control[[col_out]] <- cut(control[[col_in]], breaks = cutoffs, labels = 1:num_ranks,
-                              include.lowest = TRUE)
+                              right = FALSE, include.lowest = TRUE)
     exclude <- subset(df, df[[col_in]] == exclude_value)
     if (nrow(exclude) > 0) {
       exclude[[col_out]] <- 0
@@ -86,7 +87,8 @@ makeMixedRanks <- function(dat, col_in, mixed_col, col_out, num_ranks, exclude_v
     cutoffs <- quantile(df[[mixed_col]], probs = c(0:num_ranks/num_ranks))
     cutoffs[1] <- min(min(df[[mixed_col]]), min(df[[col_in]])) - 1
     cutoffs[num_ranks + 1] <- max(max(df[[mixed_col]]), max(df[[col_in]])) + 1
-    df[[col_out]] <- cut(df[[col_in]], breaks = cutoffs, labels = 1:num_ranks, include.lowest = TRUE)
+    df[[col_out]] <- cut(df[[col_in]], breaks = cutoffs, labels = 1:num_ranks, right = FALSE,
+                         include.lowest = TRUE)
     df[[col_out]] <- as.numeric(df[[col_out]])
   } else {
     control_mixed <- subset(df, df[[mixed_col]] != exclude_value)
@@ -98,7 +100,7 @@ makeMixedRanks <- function(dat, col_in, mixed_col, col_out, num_ranks, exclude_v
     cutoffs[1] <- min(min(control_mixed[[mixed_col]]), min(control[[col_in]])) - 1
     cutoffs[num_ranks + 1] <- max(max(control_mixed[[mixed_col]]), max(control[[col_in]])) + 1
     control[[col_out]] <- cut(control[[col_in]], breaks = cutoffs, labels = 1:num_ranks,
-                              include.lowest = TRUE)
+                              right = FALSE, include.lowest = TRUE)
     control[[col_out]] <- as.numeric(control[[col_out]])
     exclude <- subset(df, df[[col_in]] == exclude_value)
     if (nrow(exclude) > 0){
@@ -118,7 +120,8 @@ makeMixedRanks <- function(dat, col_in, mixed_col, col_out, num_ranks, exclude_v
 makeAbsoluteRanks <- function(dat, col_in, col_out, bounds){
   df <- dat[c('id', col_in)]
   num_ranks <- length(bounds) - 1
-  df[[col_out]] <- cut(df[[col_in]], breaks = bounds, labels = 1:num_ranks, include.lowest = TRUE)
+  df[[col_out]] <- cut(df[[col_in]], breaks = bounds, labels = 1:num_ranks, right = FALSE,
+                       include.lowest = TRUE)
   df[[col_out]] <- as.numeric(df[[col_out]])
   output <- list('data' = df, 'bounds' = bounds)
   return(output)

@@ -5,7 +5,7 @@
 \title{Calculates Mobility Indices for Two Time Periods}
 \usage{
 getMobilityIndices(dat, col_x, col_y, type, indices = "all", num_ranks,
-  exclude_value, bounds, strict = TRUE)
+  exclude_value, bounds, strict = TRUE, rerank_exclude_value = FALSE)
 }
 \arguments{
 \item{dat}{a dataframe in the mobilityIndexR schema}

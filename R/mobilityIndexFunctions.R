@@ -1,19 +1,48 @@
-makePraisBibby <- function(dat, rank1, rank2){
-  # Calculates Prais-Bibby Index for a dataset using rank1 and rank2
-  # dat - data.frame
-  # rank1 - string
-  # rank2 - string
-  numerator <- nrow(subset(dat, dat[[rank1]] == dat[[rank2]]))
-  denominator <- nrow(dat)
-  return(numerator/denominator)
+modifyExcludeValueRank <- function(dat, rank_x, rank_y, rerank_exclude_value, bounds_x, bounds_y, exclude_value){
+  if (rerank_exclude_value){
+    bounds_x <- bounds_x[2:length(bounds_x)]
+    bounds_y <- bounds_y[2:length(bounds_y)]
+    bounds_x[1] <- min(bounds_x[1], exclude_value)
+    bounds_y[1] <- min(bounds_y[1], exclude_value)
+    bounds_x[length(bounds_x)] <- max(bounds_x[length(bounds_x)], exclude_value) + 1
+    bounds_y[length(bounds_y)] <- max(bounds_y[length(bounds_y)], exclude_value) + 1
+    replacement_exclude_x <- as.numeric(cut(exclude_value, breaks = bounds_x, labels = 1:max(dat[[rank_x]]),
+                                            right = FALSE, include.lowest = TRUE))
+    replacement_exclude_y <- as.numeric(cut(exclude_value, breaks = bounds_y, labels = 1:max(dat[[rank_y]]),
+                                            right = FALSE, include.lowest = TRUE))
+    if (replacement_exclude_x != replacement_exclude_y){
+      warning('The exclude value is mapped to different ranks.')
+    }
+    dat[[rank_x]] <- ifelse(dat[[rank_x]] == 0, replacement_exclude_x, dat[[rank_x]])
+    dat[[rank_y]] <- ifelse(dat[[rank_y]] == 0, replacement_exclude_y, dat[[rank_y]])
+    return(dat)
+  } else {
+    condition_x <- dat[[rank_x]] != 0
+    dat <- subset(dat, condition_x)
+    condition_y <- dat[[rank_y]] != 0
+    dat <- subset(dat, condition_y)
+    return(dat)
+  }
 }
 
-makeAverageMovement <- function(dat, rank1, rank2){
+makePraisBibby <- function(dat, rank_x, rank_y){
+  # Calculates Prais-Bibby Index for a dataset using rank_x and rank_y
+  # dat - data.frame
+  # rank_x - string
+  # rank_y - string
+  condition <- dat[[rank_x]] == dat[[rank_y]]
+  numerator <- nrow(subset(dat, condition))
+  denominator <- nrow(dat)
+  value <- numerator/denominator
+  return(1 - value)
+}
+
+makeAverageMovement <- function(dat, rank_x, rank_y){
   # Calculates Average Movement Index for a dataset using rank1 and rank2
   # dat - data.frame
   # rank1 - string
   # rank2 - string
-  movement <- abs(dat[[rank1]] - dat[[rank2]])
+  movement <- abs(dat[[rank_x]] - dat[[rank_y]])
   return(mean(movement))
 }
 
@@ -22,9 +51,10 @@ makeOriginSpecific <- function(dat, rank1, rank2, where, variety){
   # dat - data.frame
   # rank1 - string
   # rank2 - string
-  # where - string - the location of the index; 'top', 'bottom', and 'zero' are accepted
+  # where - string - the location of the index; 'top' and 'bottom' are accepted
   # variety - string - does the index measure any movement or only far movement;
   # 'total' and 'far' are accepted
+  # bounds - sequence - indicates the bounds for the rank
   n1 <- max(dat[[rank1]])
   n2 <- max(dat[[rank2]])
   if (where == 'top'){
@@ -32,12 +62,12 @@ makeOriginSpecific <- function(dat, rank1, rank2, where, variety){
       num <- nrow(subset(dat, dat[[rank1]] == n1 & dat[[rank2]] < n2))
       den <- nrow(subset(dat, dat[[rank1]] == n1))
       value <- num / den
-      return(1 - value)
+      return(value)
     } else if (variety == 'far') {
       num <- nrow(subset(dat, dat[[rank1]] == n1 & dat[[rank2]] < n2 - 1))
       den <- nrow(subset(dat, dat[[rank1]] == n1))
       value <- num / den
-      return(1 - value)
+      return(value)
     } else stop("Not a valid variety! Use total or far!")
   }
   else if (where == 'bottom'){
@@ -45,21 +75,13 @@ makeOriginSpecific <- function(dat, rank1, rank2, where, variety){
       num <- nrow(subset(dat, dat[[rank1]] == 1 & dat[[rank2]] > 1))
       den <- nrow(subset(dat, dat[[rank1]] == 1))
       value <- num / den
-      return(1 - value)
+      return(value)
     } else if (variety == 'far') {
       num <- nrow(subset(dat, dat[[rank1]] == 1 & dat[[rank2]] > 2))
       den <- nrow(subset(dat, dat[[rank1]] == 1))
       value <- num / den
-      return(1 - value)
+      return(value)
     } else stop("Not a valid variety! Use total or far!")
-  }
-  else if (where == 'exclude'){
-    if (variety == 'total'){
-      num <- nrow(subset(dat, dat[[rank1]] == 0 & dat[[rank2]] > 0))
-      den <- nrow(subset(dat, dat[[rank1]] == 0))
-      value <- num / den
-      return(1 - value)
-    } else stop("Not a valid variety! Only total is used with the exclude value!")
   } else stop("Not a valid where argument! Use top, bottom, or exclude!")
 }
 
@@ -84,7 +106,7 @@ makeShorrocks <- function(dat, rank1, rank2){
 
 makeIndex <- function(dat, rank_x, rank_y, index){
   if (index == 'prais-bibby') {
-    value <- makePraisBibby(dat, rank_x, rank_y)
+    value <- makePraisBibby(dat, rank_x = rank_x, rank_y = rank_y)
     return(list('prais-bibby' = value))
   }
   else if (index == 'average-movement') {
@@ -100,12 +122,10 @@ makeIndex <- function(dat, rank_x, rank_y, index){
     far_top <- makeOriginSpecific(dat, rank_x, rank_y, 'top', 'far')
     total_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'total')
     far_bottom <- makeOriginSpecific(dat, rank_x, rank_y, 'bottom', 'far')
-    total_exclude <- makeOriginSpecific(dat, rank_x, rank_y, 'exclude', 'total')
     value <- list('os_total_top' = total_top,
                   'os_far_top' = far_top,
                   'os_total_bottom' = total_bottom,
-                  'os_far_bottom' = far_bottom,
-                  'os_total_exclude' = total_exclude)
+                  'os_far_bottom' = far_bottom)
     return(value)
   }
   else (stop('Not a supported index! See the mobilityIndexR::getIndices documentation.'))
@@ -140,7 +160,7 @@ makeIndex <- function(dat, rank_x, rank_y, index){
 #'                    col_y = 't2',
 #'                    type = 'relative',
 #'                    num_ranks = 5)
-getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, strict = TRUE){
+getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, strict = TRUE, rerank_exclude_value = FALSE){
   df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
                          num_ranks = num_ranks, exclude_value = exclude_value,
                          mixed_col = col_x, bounds = bounds, strict = strict)
@@ -149,6 +169,11 @@ getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ran
                          mixed_col = col_x, bounds = bounds, strict = strict)
   df <- merge(df_rank_x$data, df_rank_y$data, by = 'id')
   output <- list()
+  if (!missing(exclude_value)){
+    df <- modifyExcludeValueRank(dat = df, rank_x = 'rank_x', rank_y = 'rank_y',
+                                 rerank_exclude_value = rerank_exclude_value, bounds_x = df_rank_x$bounds,
+                                 bounds_y = df_rank_y$bounds, exclude_value = exclude_value)
+  }
   if (indices == 'all') {
     indices <- c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific')
   }
@@ -161,3 +186,4 @@ getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ran
   }
   return(output)
 }
+
