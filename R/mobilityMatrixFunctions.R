@@ -117,13 +117,31 @@ makeMixedRanks <- function(dat, col_in, mixed_col, col_out, num_ranks, exclude_v
   return(output)
 }
 
-makeAbsoluteRanks <- function(dat, col_in, col_out, bounds){
+makeAbsoluteRanks <- function(dat, col_in, col_out, bounds, exclude_value){
   df <- dat[c('id', col_in)]
   num_ranks <- length(bounds) - 1
-  df[[col_out]] <- cut(df[[col_in]], breaks = bounds, labels = 1:num_ranks, right = FALSE,
-                       include.lowest = TRUE)
-  df[[col_out]] <- as.numeric(df[[col_out]])
-  output <- list('data' = df, 'bounds' = bounds)
+  if (missing(exclude_value)){
+    df[[col_out]] <- cut(df[[col_in]], breaks = bounds, labels = 1:num_ranks, right = FALSE,
+                         include.lowest = TRUE)
+    df[[col_out]] <- as.numeric(df[[col_out]])
+    output <- list('data' = df, 'bounds' = bounds)
+  }
+  else {
+    control <- subset(df, df[[col_in]] != exclude_value)
+    control[[col_out]] <- cut(control[[col_in]], breaks = bounds, labels = 1:num_ranks,
+                              right = FALSE, include.lowest = TRUE)
+    control[[col_out]] <- as.numeric(control[[col_out]])
+    exclude <- subset(df, df[[col_in]] == exclude_value)
+    if (nrow(exclude) > 0){
+      exclude[[col_out]] <- 0
+      exclude[[col_out]] <- as.numeric(exclude[[col_out]])
+      df <- rbind(control, exclude)
+    } else {
+      df <- control
+    }
+    bounds <- c(exclude_value, bounds)
+    output <- list('data' = df, 'bounds' = bounds)
+  }
   return(output)
 }
 
@@ -136,7 +154,7 @@ makeRanks <- function(dat, col_in, col_out, type, num_ranks, exclude_value, mixe
     df_out <- makeMixedRanks(dat = dat, col_in = col_in, mixed_col = mixed_col, col_out = col_out,
                              num_ranks = num_ranks, exclude_value = exclude_value, strict = strict)
   } else if (type == 'absolute'){
-    df_out <- makeAbsoluteRanks(dat = dat, col_in = col_in, col_out = col_out, bounds = bounds)
+    df_out <- makeAbsoluteRanks(dat = dat, col_in = col_in, col_out = col_out, bounds = bounds, exclude_value = exclude_value)
   } else {
     stop('Not a valid rank type! Try relative, mixed, or absolute.')
   }
@@ -178,7 +196,7 @@ makeTMatrix <- function(dat, rank_x, rank_y, probs){
 #' data(incomeMobility)
 #' getTMatrix(dat = incomeMobility,
 #'            col_x = 't0',
-#'            col_y = 't3',
+#'            col_y = 't9',
 #'            type = 'relative',
 #'            num_ranks = 5)
 getTMatrix <- function(dat, col_x, col_y, type, probs = TRUE, num_ranks, exclude_value, bounds, strict = TRUE){

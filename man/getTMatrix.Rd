@@ -41,7 +41,7 @@ and absolute transition matrices.
 data(incomeMobility)
 getTMatrix(dat = incomeMobility,
            col_x = 't0',
-           col_y = 't3',
+           col_y = 't9',
            type = 'relative',
            num_ranks = 5)
 }

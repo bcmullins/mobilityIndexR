@@ -133,8 +133,9 @@ makeIndex <- function(dat, rank_x, rank_y, index){
 
 #' @title Calculates Mobility Indices for Two Time Periods
 #'
-#' @description Calculates desired mobility indices from two columns in dataset. Supports relative, mixed,
-#' and absolute rankings in the calculation of indices.
+#' @description Calculates mobility indices from two columns in dataset. Supports Prais-Bibby,
+#' Absolute Movement, Origin Specific, and Shorrocks indices and relative, mixed,
+#' and absolute types of rankings in the calculation these indices.
 #'
 #' @param dat a dataframe in the mobilityIndexR schema
 #' @param col_x a character string denoting the first column to be used in the index calculation
@@ -149,8 +150,12 @@ makeIndex <- function(dat, rank_x, rank_y, index){
 #' @param bounds a sequence of numeric bounds for defining absolute ranks
 #' @param strict logical. If TRUE, rankings are calculated from the given values. If FALSE,
 #' rankings are calculated by slightly jittering the values to ensure uniqueness of bounds.
+#' The default value if 'true'.
+#' @param rerankExcludeValue logical. If TRUE, the exclude value is reranked for both col_in and col_out
+#' according the bounds used in the ranking for calculating indices. If FALSE, rows with an exclude value
+#' are excludes from index calculations.
 #'
-#' @return Returns a named list containing the desired index values
+#' @return Returns a named vector containing the desired index values
 #' @export
 #'
 #' @examples
