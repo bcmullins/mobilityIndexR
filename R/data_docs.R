@@ -1,6 +1,6 @@
 #' @title Example Income Dataset
 #'
-#' @description blah blah blah
+#' @description This is an example income dataset to measure income mobility.
 #'
 #' @format A \code{data.frame} with 13 columns:
 #' \describe{
@@ -22,7 +22,9 @@
 
 #' @title Example Zero-Inflated Income Dataset
 #'
-#' @description blah blah blah
+#' @description These is an example income dataset to measure income mobility with an inflated number of zeros.
+#' Zero-inflated data is often observed in practice and will cause difficulties for some transition matrix and mobility
+#' index approaches.
 #'
 #' @format A \code{data.frame} with 13 columns:
 #' \describe{
@@ -44,7 +46,7 @@
 
 #' @title Example Grades Dataset
 #'
-#' @description blah blah blah
+#' @description This is an example grade dataset for measuring grade mobility.
 #'
 #' @format A \code{data.frame} with 13 columns:
 #' \describe{
