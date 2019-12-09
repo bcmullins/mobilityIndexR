@@ -24,6 +24,6 @@
 incomeMobility
 }
 \description{
-blah blah blah
+This is an example income dataset to measure income mobility.
 }
 \keyword{datasets}

@@ -24,6 +24,6 @@
 gradeMobility
 }
 \description{
-blah blah blah
+This is an example grade dataset for measuring grade mobility.
 }
 \keyword{datasets}

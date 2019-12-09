@@ -7,46 +7,78 @@
 
 <!-- badges: end -->
 
-The goal of mobilityIndexR is to …
+mobilityIndexR measures mobility in a population by generating
+transition matrices and calculating mobility
+indices.
 
 ## Installation
 
-You can install the released version of mobilityIndexR from
-[CRAN](https://CRAN.R-project.org) with:
+<!-- You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with: -->
+
+<!-- #``` r -->
+
+<!-- #install.packages("mobilityIndexR") -->
+
+<!-- #``` -->
 
 ``` r
-install.packages("mobilityIndexR")
+# Install the development version from GitHub:
+# install.packages("devtools")
+devtools::install_github("bcmullins/mobilityIndexR")
 ```
 
-## Example
+## Basic Usage
 
-This is a basic example which shows you how to solve a common problem:
+Let’s use one of the built in datasets to create a transition matrix:
 
 ``` r
 library(mobilityIndexR)
-## basic example code
+data("incomeMobility")
+getTMatrix(dat = incomeMobility, col_x = 't0', col_y = 't5', type = 'relative', probs = TRUE, num_ranks = 5)
+#> $tmatrix
+#>    
+#>         1     2     3     4     5
+#>   1 0.152 0.040 0.008 0.000 0.000
+#>   2 0.048 0.080 0.048 0.024 0.000
+#>   3 0.000 0.048 0.064 0.056 0.032
+#>   4 0.000 0.008 0.024 0.120 0.048
+#>   5 0.000 0.024 0.056 0.000 0.120
+#> 
+#> $col_x_bounds
+#>      0%     20%     40%     60%     80%    100% 
+#>   462.0 21543.4 42469.8 64061.6 77888.4 99557.0 
+#> 
+#> $col_y_bounds
+#>          0%         20%         40%         60%         80%        100% 
+#>    340.2705  18204.9969  39710.3062  58494.6271  78178.6713 262909.3195
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+Using this data, let’s now calculate mobility indices:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+  library(mobilityIndexR)
+  data("incomeMobility")
+  getMobilityIndices(dat = incomeMobility, col_x = 't0', col_y = 't5', type = 'relative', num_ranks = 5)
+#> $`prais-bibby`
+#> [1] 0.464
+#> 
+#> $`average-movement`
+#> [1] 0.64
+#> 
+#> $shorrocks
+#> [1] 0.58
+#> 
+#> $os_total_top
+#> [1] 0.4
+#> 
+#> $os_far_top
+#> [1] 0.4
+#> 
+#> $os_total_bottom
+#> [1] 0.24
+#> 
+#> $os_far_bottom
+#> [1] 0.04
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+## More examples coming soon\!

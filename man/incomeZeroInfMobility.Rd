@@ -24,6 +24,8 @@
 incomeZeroInfMobility
 }
 \description{
-blah blah blah
+These is an example income dataset to measure income mobility with an inflated number of zeros.
+Zero-inflated data is often observed in practice and will cause difficulties for some transition matrix and mobility
+index approaches.
 }
 \keyword{datasets}

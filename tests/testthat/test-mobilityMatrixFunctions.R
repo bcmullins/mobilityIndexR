@@ -1,3 +1,5 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
-})
+test_that("relative transition matrices no exclude values", )
+
+test_that("relative transition matrices with exclude values", )
+
+

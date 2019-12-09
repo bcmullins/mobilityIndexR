@@ -1,7 +1,7 @@
 Package: mobilityIndexR
 Type: Package
 Title: Calculates Transition Matrices and Mobility Indices
-Version: 0.1.5
+Version: 0.1.6
 Author: Brett Mullins and Trevor Harkreader
 Maintainer: Brett Mullins <brettcmullins@gmail.com>
 Description: This package measures mobility in a population through transition matrices and mobility indices. Relative, mixed, and absolute transition matrices are supported for various use cases. With respect to indices, the Prais-Bibby, Absolute Movement, Origin Specific, and Shorrocks indices are supported. Example income and grade data are included for demos.
