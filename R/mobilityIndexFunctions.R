@@ -131,6 +131,33 @@ makeIndex <- function(dat, rank_x, rank_y, index){
   else (stop('Not a supported index! See the mobilityIndexR::getIndices documentation.'))
 }
 
+makeMobilityIndices <- function(dat, col_x, col_y, type, indices, num_ranks, exclude_value, bounds, strict, rerank_exclude_value){
+  df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
+                         num_ranks = num_ranks, exclude_value = exclude_value,
+                         mixed_col = col_x, bounds = bounds, strict = strict)
+  df_rank_y <- makeRanks(dat = dat, col_in = col_y, col_out = 'rank_y', type = type,
+                         num_ranks = num_ranks, exclude_value = exclude_value,
+                         mixed_col = col_x, bounds = bounds, strict = strict)
+  df <- merge(df_rank_x$data, df_rank_y$data, by = 'id')
+  output <- list()
+  if (!missing(exclude_value)){
+    df <- modifyExcludeValueRank(dat = df, rank_x = 'rank_x', rank_y = 'rank_y',
+                                 rerank_exclude_value = rerank_exclude_value, bounds_x = df_rank_x$bounds,
+                                 bounds_y = df_rank_y$bounds, exclude_value = exclude_value)
+  }
+  if (indices == 'all') {
+    indices <- c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific')
+  }
+  for (index in indices){
+    if (!(index %in% c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific'))){
+      stop(paste('Index', index, 'not supported.'))
+    }
+    value <- makeIndex(dat = df, rank_x = 'rank_x', rank_y = 'rank_y', index = index)
+    output <- c(output, value)
+  }
+  return(output)
+}
+
 #' @title Calculates Mobility Indices for Two Time Periods
 #'
 #' @description Calculates mobility indices from two columns in dataset. Supports Prais-Bibby,
@@ -166,29 +193,8 @@ makeIndex <- function(dat, rank_x, rank_y, index){
 #'                    type = 'relative',
 #'                    num_ranks = 5)
 getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, strict = TRUE, rerank_exclude_value = FALSE){
-  df_rank_x <- makeRanks(dat = dat, col_in = col_x, col_out = 'rank_x', type = type,
-                         num_ranks = num_ranks, exclude_value = exclude_value,
-                         mixed_col = col_x, bounds = bounds, strict = strict)
-  df_rank_y <- makeRanks(dat = dat, col_in = col_y, col_out = 'rank_y', type = type,
-                         num_ranks = num_ranks, exclude_value = exclude_value,
-                         mixed_col = col_x, bounds = bounds, strict = strict)
-  df <- merge(df_rank_x$data, df_rank_y$data, by = 'id')
-  output <- list()
-  if (!missing(exclude_value)){
-    df <- modifyExcludeValueRank(dat = df, rank_x = 'rank_x', rank_y = 'rank_y',
-                                 rerank_exclude_value = rerank_exclude_value, bounds_x = df_rank_x$bounds,
-                                 bounds_y = df_rank_y$bounds, exclude_value = exclude_value)
-  }
-  if (indices == 'all') {
-    indices <- c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific')
-  }
-  for (index in indices){
-    if (!(index %in% c('prais-bibby', 'average-movement', 'shorrocks', 'origin-specific'))){
-      stop(paste('Index', index, 'not supported.'))
-    }
-    value <- makeIndex(dat = df, rank_x = 'rank_x', rank_y = 'rank_y', index = index)
-    output <- c(output, value)
-  }
+  output <- makeMobilityIndices(dat = dat, col_x = col_x, col_y = col_y, type = type, indices = indices, num_ranks = num_ranks, exclude_value = exclude_value, bounds = bounds, strict = strict, rerank_exclude_value = rerank_exclude_value)
   return(output)
 }
+
 
