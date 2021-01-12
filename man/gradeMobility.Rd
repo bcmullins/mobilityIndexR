@@ -4,7 +4,8 @@
 \name{gradeMobility}
 \alias{gradeMobility}
 \title{Example Grades Dataset}
-\format{A \code{data.frame} with 13 columns:
+\format{
+A \code{data.frame} with 13 columns:
 \describe{
  \item{id}{A unique integer id for each row representing a student}
  \item{cohort}{Class of student}
@@ -19,7 +20,8 @@
  \item{t8}{Grade at time 8}
  \item{t9}{Grade at time 9}
  \item{t10}{Grade at time 10}
- }}
+ }
+}
 \usage{
 gradeMobility
 }

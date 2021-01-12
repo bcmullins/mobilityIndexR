@@ -4,7 +4,8 @@
 \name{incomeMobility}
 \alias{incomeMobility}
 \title{Example Income Dataset}
-\format{A \code{data.frame} with 13 columns:
+\format{
+A \code{data.frame} with 13 columns:
 \describe{
  \item{id}{A unique integer id for each row representing an individual}
  \item{cohort}{Year when first income is observed}
@@ -19,7 +20,8 @@
  \item{t8}{Income at time 8}
  \item{t9}{Income at time 9}
  \item{t10}{Income at time 10}
-}}
+}
+}
 \usage{
 incomeMobility
 }

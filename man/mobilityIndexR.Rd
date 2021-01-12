@@ -3,7 +3,6 @@
 \docType{package}
 \name{mobilityIndexR}
 \alias{mobilityIndexR}
-\alias{mobilityIndexR-package}
 \title{mobilityIndexR: A package for calculating transition matrices and mobility indices}
 \description{
 This package measures mobility in a population through transition matrices and mobility indices.

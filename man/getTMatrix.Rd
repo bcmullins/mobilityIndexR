@@ -4,15 +4,25 @@
 \alias{getTMatrix}
 \title{Calculates Transition Matrix}
 \usage{
-getTMatrix(dat, col_x, col_y, type, probs = TRUE, num_ranks,
-  exclude_value, bounds, strict = TRUE)
+getTMatrix(
+  dat,
+  col_x,
+  col_y,
+  type,
+  probs = TRUE,
+  num_ranks,
+  exclude_value,
+  bounds,
+  rerank_exclude_value,
+  strict = TRUE
+)
 }
 \arguments{
-\item{dat}{a dataframe in the mobilityIndexR schema}
+\item{dat}{a dataframe with an "id" column}
 
-\item{col_x}{a character string denoting the first column to be used in the transition matrix}
+\item{col_x}{a character string denoting the first column from dat to be used in the transition matrix}
 
-\item{col_y}{a character string denoting the second column to be used in the transition matrix}
+\item{col_y}{a character string denoting the second column from dat to be used in the transition matrix}
 
 \item{type}{a character string indicating the type of transition matrix;
 accepts 'relative', 'mixed', and 'absolute'}
@@ -22,20 +32,24 @@ if FALSE, values in transition matrix are counts}
 
 \item{num_ranks}{an integer specifying the number of ranks for a relative or mixed transition matrix}
 
-\item{exclude_value}{a single numeric value to assign exclusively to the zero rank in the transition matrix}
+\item{exclude_value}{a single numeric value that is excluded in calculating the transition matrix;
+see the rerankExcludeValue parameter to specify how the exclude value is handled}
 
 \item{bounds}{a sequence of numeric bounds for defining absolute transition matrix ranks}
 
 \item{strict}{logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
-transition matrix calculated by slightly jittering the values to ensure uniqueness of bounds.
+transition matrix is calculated by jittering the values to ensure uniqueness of bounds.
 Only used with relative and mixed types.}
+
+\item{rerankExcludeValue}{a character string indicating how the exclude value is handled when present; accepts
+'as_new_rank', 'as_existing_rank', and 'exclude'}
 }
 \value{
-Returns list with the transition matrix as a Matrix and vectors with the bounds corresponding to the ranks.
+Returns a list with a transition matrix as a Matrix and vectors of the the x and y bounds corresponding to the ranks in the matrix
 }
 \description{
 Returns transition matrix from two columns in dataset. Supports relative, mixed,
-and absolute transition matrices.
+and absolute transition matrices as well as handling an excluded value.
 }
 \examples{
 data(incomeMobility)
