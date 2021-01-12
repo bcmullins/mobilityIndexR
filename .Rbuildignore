@@ -5,3 +5,4 @@
 ^data-raw$
 ^appveyor\.yml$
 ^codecov\.yml$
+^\.travis\.yml$
