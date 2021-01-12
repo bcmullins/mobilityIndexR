@@ -32,9 +32,6 @@ on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
 
-after_success:
-  - Rscript -e 'covr::coveralls()'
-
 artifacts:
   - path: '*.Rcheck\**\*.log'
     name: Logs
@@ -53,3 +50,6 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
+
+on_success:
+  - Rscript -e 'covr::coveralls()'
