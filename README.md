@@ -5,11 +5,12 @@
 
 <!-- badges: start -->
 
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/bcmullins/mobilityIndexR?branch=master&svg=true)](https://ci.appveyor.com/project/bcmullins/mobilityIndexR)
 <!-- badges: end -->
 
 mobilityIndexR measures mobility in a population by generating
-transition matrices and calculating mobility
-indices.
+transition matrices and calculating mobility indices.
 
 ## Installation
 
@@ -59,17 +60,11 @@ Using this data, let’s now calculate mobility indices:
   library(mobilityIndexR)
   data("incomeMobility")
   getMobilityIndices(dat = incomeMobility, col_x = 't0', col_y = 't5', type = 'relative', num_ranks = 5)
-#> $`prais-bibby`
-#> [1] 0.464
-#> 
-#> $`average-movement`
+#> $average_movement
 #> [1] 0.64
 #> 
-#> $shorrocks
-#> [1] 0.58
-#> 
-#> $os_total_top
-#> [1] 0.4
+#> $os_far_bottom
+#> [1] 0.04
 #> 
 #> $os_far_top
 #> [1] 0.4
@@ -77,8 +72,14 @@ Using this data, let’s now calculate mobility indices:
 #> $os_total_bottom
 #> [1] 0.24
 #> 
-#> $os_far_bottom
-#> [1] 0.04
+#> $os_total_top
+#> [1] 0.4
+#> 
+#> $prais_bibby
+#> [1] 0.464
+#> 
+#> $wgm
+#> [1] 0.58
 ```
 
 ## More examples coming soon\!
