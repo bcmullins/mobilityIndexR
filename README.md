@@ -7,6 +7,8 @@
 
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/bcmullins/mobilityIndexR?branch=master&svg=true)](https://ci.appveyor.com/project/bcmullins/mobilityIndexR)
+[![Codecov test
+coverage](https://codecov.io/gh/bcmullins/mobilityIndexR/branch/master/graph/badge.svg)](https://codecov.io/gh/bcmullins/mobilityIndexR?branch=master)
 <!-- badges: end -->
 
 mobilityIndexR measures mobility in a population by generating
