@@ -19,7 +19,7 @@
 #' The default value is 'all'.
 #' @param num_ranks an integer specifying the number of ranks for a relative or mixed ranking
 #' @param exclude_value a single numeric value that is excluded in calculating the transition matrix;
-#' see the rerankExcludeValue parameter to specify how the exclude value is handled
+#' see the rerank_exclude_value parameter to specify how the exclude value is handled
 #' @param bounds a sequence of numeric bounds for defining absolute ranks
 #' @param rerank_exclude_value a character string indicating how the exclude value is handled when present; accepts
 #' 'as_new_rank', 'as_existing_rank', and 'exclude'

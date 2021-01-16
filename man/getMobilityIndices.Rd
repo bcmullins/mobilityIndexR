@@ -13,7 +13,7 @@ getMobilityIndices(
   num_ranks,
   exclude_value,
   bounds,
-  rerank_exclude_value = FALSE,
+  rerank_exclude_value,
   strict = TRUE,
   intervals = FALSE,
   interval_pct = 0.95,
@@ -37,9 +37,12 @@ The default value is 'all'.}
 \item{num_ranks}{an integer specifying the number of ranks for a relative or mixed ranking}
 
 \item{exclude_value}{a single numeric value that is excluded in calculating the transition matrix;
-see the rerankExcludeValue parameter to specify how the exclude value is handled}
+see the rerank_exclude_value parameter to specify how the exclude value is handled}
 
 \item{bounds}{a sequence of numeric bounds for defining absolute ranks}
+
+\item{rerank_exclude_value}{a character string indicating how the exclude value is handled when present; accepts
+'as_new_rank', 'as_existing_rank', and 'exclude'}
 
 \item{strict}{logical. If TRUE, indices are calculated from the given values. If FALSE,
 indices are calculated by jittering the values to ensure uniqueness of bounds of ranks.
@@ -53,9 +56,6 @@ The default value is 0.95.}
 
 \item{bootstrap_iter}{the number of bootstrap iterations used to estimate intervals.
 The default value is 100.}
-
-\item{rerankExcludeValue}{a character string indicating how the exclude value is handled when present; accepts
-'as_new_rank', 'as_existing_rank', and 'exclude'}
 }
 \value{
 Returns a named vector containing the desired index values

@@ -152,6 +152,8 @@ makeBootstrapSamples <- function(dat, col_x, col_y, type, indices, num_ranks, ex
 #' Absolute Movement, Origin Specific, and Weighted Group Mobility indices and relative, mixed,
 #' and absolute types of rankings in the calculation these indices.
 #'
+#' @import stats
+#'
 #' @param dat a dataframe with an "id" column
 #' @param col_x a character string denoting the first column to be used in the index calculation
 #' @param col_y a character string denoting the second column to be used in the index calculation
@@ -162,9 +164,9 @@ makeBootstrapSamples <- function(dat, col_x, col_y, type, indices, num_ranks, ex
 #' The default value is 'all'.
 #' @param num_ranks an integer specifying the number of ranks for a relative or mixed ranking
 #' @param exclude_value a single numeric value that is excluded in calculating the transition matrix;
-#' see the rerankExcludeValue parameter to specify how the exclude value is handled
+#' see the rerank_exclude_value parameter to specify how the exclude value is handled
 #' @param bounds a sequence of numeric bounds for defining absolute ranks
-#' @param rerankExcludeValue a character string indicating how the exclude value is handled when present; accepts
+#' @param rerank_exclude_value a character string indicating how the exclude value is handled when present; accepts
 #' 'as_new_rank', 'as_existing_rank', and 'exclude'
 #' @param strict logical. If TRUE, indices are calculated from the given values. If FALSE,
 #' indices are calculated by jittering the values to ensure uniqueness of bounds of ranks.
@@ -186,7 +188,7 @@ makeBootstrapSamples <- function(dat, col_x, col_y, type, indices, num_ranks, ex
 #'                    col_y = 't2',
 #'                    type = 'relative',
 #'                    num_ranks = 5)
-getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, rerank_exclude_value = FALSE, strict = TRUE, intervals = FALSE, interval_pct = 0.95, bootstrap_iter = 100){
+getMobilityIndices <- function(dat, col_x, col_y, type, indices = 'all', num_ranks, exclude_value, bounds, rerank_exclude_value, strict = TRUE, intervals = FALSE, interval_pct = 0.95, bootstrap_iter = 100){
   output <- makeMobilityIndices(dat = dat, col_x = col_x, col_y = col_y, type = type, indices = indices, num_ranks = num_ranks, exclude_value = exclude_value, bounds = bounds, strict = strict, rerank_exclude_value = rerank_exclude_value)
   if (intervals == TRUE){
     stopifnot(is.numeric(interval_pct))

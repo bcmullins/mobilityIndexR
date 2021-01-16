@@ -8,6 +8,7 @@
 #' @section mobilityIndexR functions:
 #' getTMatrix
 #' getMobilityIndices
+#' getHypothesisTest
 #'
 #' @docType package
 #' @name mobilityIndexR

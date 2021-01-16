@@ -6,3 +6,7 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^\.travis\.yml$
+^.git$
+^.gitignore$
+^doc$
+^Meta$

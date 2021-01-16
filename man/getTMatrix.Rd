@@ -33,16 +33,16 @@ if FALSE, values in transition matrix are counts}
 \item{num_ranks}{an integer specifying the number of ranks for a relative or mixed transition matrix}
 
 \item{exclude_value}{a single numeric value that is excluded in calculating the transition matrix;
-see the rerankExcludeValue parameter to specify how the exclude value is handled}
+see the rerank_exclude_value parameter to specify how the exclude value is handled}
 
 \item{bounds}{a sequence of numeric bounds for defining absolute transition matrix ranks}
+
+\item{rerank_exclude_value}{a character string indicating how the exclude value is handled when present; accepts
+'as_new_rank', 'as_existing_rank', and 'exclude'}
 
 \item{strict}{logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
 transition matrix is calculated by jittering the values to ensure uniqueness of bounds.
 Only used with relative and mixed types.}
-
-\item{rerankExcludeValue}{a character string indicating how the exclude value is handled when present; accepts
-'as_new_rank', 'as_existing_rank', and 'exclude'}
 }
 \value{
 Returns a list with a transition matrix as a Matrix and vectors of the the x and y bounds corresponding to the ranks in the matrix

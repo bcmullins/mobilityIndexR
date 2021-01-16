@@ -14,5 +14,6 @@ grade data are included for demos.
 
 getTMatrix
 getMobilityIndices
+getHypothesisTest
 }
 

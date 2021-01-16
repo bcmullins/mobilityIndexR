@@ -3,3 +3,4 @@
 export(getHypothesisTest)
 export(getMobilityIndices)
 export(getTMatrix)
+import(stats)

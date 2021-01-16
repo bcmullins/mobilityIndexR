@@ -1,6 +1,12 @@
 checkInputs <- function(dat, col_in, col_out, num_ranks, mixed_col, bounds, exclude_value, rerank_exclude_value){
   stopifnot(is.data.frame(dat))
   stopifnot(nrow(dat) > 0)
+  if (!("id" %in% colnames(dat))) {
+    stop(paste(dat, "does not contain column 'id'"))
+  }
+  if (length(dat[["id"]]) != length(unique(dat[["id"]]))) {
+    stop("'id' column contains non-unique values.")
+  }
   stopifnot(is.character(col_in))
   stopifnot(is.character(col_out))
   if (!missing(num_ranks)) {
@@ -241,9 +247,9 @@ makeTMatrix <- function(dat, rank_x, rank_y, probs){
 #' if FALSE, values in transition matrix are counts
 #' @param num_ranks an integer specifying the number of ranks for a relative or mixed transition matrix
 #' @param exclude_value a single numeric value that is excluded in calculating the transition matrix;
-#' see the rerankExcludeValue parameter to specify how the exclude value is handled
+#' see the rerank_exclude_value parameter to specify how the exclude value is handled
 #' @param bounds a sequence of numeric bounds for defining absolute transition matrix ranks
-#' @param rerankExcludeValue a character string indicating how the exclude value is handled when present; accepts
+#' @param rerank_exclude_value a character string indicating how the exclude value is handled when present; accepts
 #' 'as_new_rank', 'as_existing_rank', and 'exclude'
 #' @param strict logical. If TRUE, transition matrix is calculated from the given values. If FALSE,
 #' transition matrix is calculated by jittering the values to ensure uniqueness of bounds.

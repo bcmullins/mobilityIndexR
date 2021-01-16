@@ -4,16 +4,18 @@ test_that("Testing checkInputs",
   {
     expect_error(checkInputs(dat = 1, col_in = "x", col_out = "y"))
     expect_error(checkInputs(dat = data.frame(), col_in = "x", col_out = "y"))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = 1, col_out = "y"))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = 1))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", num_ranks = "a"))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", num_ranks = 3))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", mixed_col = 5))
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", bounds = c(2, 3)),
+    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y"))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,1)), col_in = "x", col_out = "y"))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = 1, col_out = "y"))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = 1))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", num_ranks = "a"))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", num_ranks = 3))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", mixed_col = 5))
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", bounds = c(2, 3)),
                  regexp ="At least one data value falls below the first bound.")
-    expect_error(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", bounds = c(0, 1)),
+    expect_error(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", bounds = c(0, 1)),
                  regexp ="At least one data value falls above the last bound.")
-    expect_silent(checkInputs(dat = data.frame(x = c(1,2)), col_in = "x", col_out = "y", bounds = c(1, 2)))
+    expect_silent(checkInputs(dat = data.frame(x = c(1,2), id = c(1,2)), col_in = "x", col_out = "y", bounds = c(1, 2)))
   }
 )
 
