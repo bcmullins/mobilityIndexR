@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup, include = FALSE}
+library(mobilityIndexR)
+```
+
 # mobilityIndexR
 
 <!-- badges: start -->
@@ -46,7 +50,7 @@ head(incomeMobility)
 
 ## Relative
 
-Types of transition matrices differ by how values are binned into ranks. With relative transition matrices, values in each of the two specified columns (`col_x`, `col_y`) are binned into ranks as quantiles. The number of quantiles is specified in the `num_ranks` argument. Note: if one value in the data occurs more often than the size of the quantile ranks, then `getTMatrix` will throw an error; see [Exclude Value](#exclude-value).
+Types of transition matrices differ by how values are binned into ranks. With relative transition matrices, values in each of the two specified columns (`col_x`, `col_y`) are binned into ranks as quantiles. The number of quantiles is specified in the `num_ranks` argument. Note: if one value in the data occurs more often than the size of the quantile ranks, then `getTMatrix` will throw an error.
 
 `getTMatrix` returns a list containing the transition matrix as well as the bounds used to bin the data into ranks. 
 
@@ -82,7 +86,7 @@ getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5",
 
 # Mobility Indices
 
-Mobility indices are measures of mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. `mobilityIndexR` calculates indices using the `getMobilityIndices` function. By default, the `getMobilityIndices` returns all available indices. Note that `getMobilityIndices` can additionally return bootstrapped intervals for each of the indices; see [Bootstrapped Intervals](#bootstrapped-intervals).
+Mobility indices are measures of mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. `mobilityIndexR` calculates indices using the `getMobilityIndices` function. By default, the `getMobilityIndices` returns all available indices. Note that `getMobilityIndices` can additionally return bootstrapped intervals for each of the indices.
 
 ```{r indices}
 getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5", 
