@@ -21,20 +21,21 @@ library(mobilityIndexR)
 
 <!-- badges: start -->
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/bcmullins/mobilityIndexR?branch=master&svg=true)](https://ci.appveyor.com/project/bcmullins/mobilityIndexR)
+[![CRAN status](https://www.r-pkg.org/badges/version/mobilityIndexR)](https://CRAN.R-project.org/package=mobilityIndexR)
 <!-- badges: end -->
 
 `mobilityIndexR` allows users to both calculate transition matrices (relative, mixed, and absolute) as well as calculate and compare mobility indices (*Prais-Bibby*, *Average Movement*, *Weighted Group Mobility*, and *Origin Specific*).
 
 ## Installation
 
-<!-- You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with: -->
-
-<!-- #``` r -->
-<!-- #install.packages("mobilityIndexR") -->
-<!-- #``` -->
+You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-# Install the development version from GitHub:
+install.packages("mobilityIndexR")
+```
+
+You can install the development version of mobilityIndexR from [Github](https://github.com) with:
+``` r
 # install.packages("devtools")
 devtools::install_github("bcmullins/mobilityIndexR")
 ```

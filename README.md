@@ -7,6 +7,8 @@
 
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/bcmullins/mobilityIndexR?branch=master&svg=true)](https://ci.appveyor.com/project/bcmullins/mobilityIndexR)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/mobilityIndexR)](https://CRAN.R-project.org/package=mobilityIndexR)
 <!-- badges: end -->
 
 `mobilityIndexR` allows users to both calculate transition matrices
@@ -16,16 +18,17 @@ Mobility*, and *Origin Specific*).
 
 ## Installation
 
-<!-- You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with: -->
-
-<!-- #``` r -->
-
-<!-- #install.packages("mobilityIndexR") -->
-
-<!-- #``` -->
+You can install the released version of mobilityIndexR from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-# Install the development version from GitHub:
+install.packages("mobilityIndexR")
+```
+
+You can install the development version of mobilityIndexR from
+[Github](https://github.com) with:
+
+``` r
 # install.packages("devtools")
 devtools::install_github("bcmullins/mobilityIndexR")
 ```
@@ -262,25 +265,25 @@ getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility,
                   cols_A = c("t0", "t3"), cols_B = c("t5", "t8"),
                   type = "relative", num_ranks = 5, bootstrap_iter = 100)
 #> $prais_bibby
-#> [1] 0.32
+#> [1] 0.31
 #> 
 #> $average_movement
-#> [1] 0.47
+#> [1] 0.52
 #> 
 #> $wgm
-#> [1] 0.34
+#> [1] 0.33
 #> 
 #> $os_total_top
-#> [1] 0.53
+#> [1] 0.55
 #> 
 #> $os_far_top
-#> [1] 0.9
+#> [1] 0.94
 #> 
 #> $os_total_bottom
-#> [1] 0.27
+#> [1] 0.37
 #> 
 #> $os_far_bottom
-#> [1] 0.02
+#> [1] 0
 ```
 
 By default, all available indices are returned. A single index or subset
