@@ -22,17 +22,17 @@ bibliography: paper.bib
 
 # Summary
 
-`mobilityIndexR` is an R package for calculating transition matrices and mobility indices to measure mobility from two columns of numeric values in a dataset. For instance, tracking the income of a cohort over some period of time allows one to measure the income mobility of that cohort. 
+`mobilityIndexR` is an R package for calculating transition matrices and mobility indices to measure mobility from two fields of numeric values in a dataset. For instance, collecting income information for a set of individuals at the beginning and end of a period of time allows one to measure the income mobility of that cohort over the time period. 
 
-There are different types of transition matrices and mobility indices which each combine to capture various facets of mobility. Regarding transition matrices, this package supports relative, mixed, and absolute matrices. These correspond to distinct methods for discretising the numeric values into ranks. Regarding mobility indices, this package supports many commonly used indices such as Prais-Bibby [@bibby1975] and a generalized form of Shorrocks' M-hat called Weighted Group Mobility [@shorrocks1978]. Additionally, this package can estimate non-parametric confidence intervals for these indices as well as perform non-parametric hypothesis tests to compare indices between samples.
+There are different types of transition matrices and mobility indices which each combine to capture various facets of mobility. Regarding transition matrices, this package supports relative, mixed, and absolute matrices. These correspond to distinct methods for discretising the numeric values into ranks. Regarding mobility indices, this package supports many commonly used indices such as Prais-Bibby [@bibby1975] and a generalized form of Shorrocks' M-hat called Weighted Group Mobility [@shorrocks1978]. Additionally, this package can estimate nonparametric confidence intervals for these indices as well as perform nonparametric hypothesis tests to compare indices between samples.
 
 You can find the latest release of `mobilityIndexR` on CRAN (https://cran.r-project.org/web/packages/mobilityIndexR/index.html) and the development version on Github (https://github.com/bcmullins/mobilityIndexR). For an introduction to income mobility - the primary use case for `mobilityIndexR` - see @jantti2015 and @bradbury2016. 
 
 # Statement of Need
 
-`mobilityIndexR` is a package written in the R langauage [@R] designed to be used by social science and public policy researchers. It was first used in @wallace2019 and provides the basis for measuring mobility in forthcoming publications within this project.
+`mobilityIndexR` is a package written in the R langauage [@R] designed to be used by social science and public policy researchers but can be used for general applications of measuring mobility. It was first used in @wallace2019 and provides the basis for measuring mobility in forthcoming publications within this project.
 
-This package combines three functionalities and tailors them to a social science and public policy setting. The first is generating transition matrices. While several recent packages, e.g. @markovchain, allow the user to calculate transition matrices from numeric data, the user must manually adjust the data so to create various types of transition matrices (relative, mixed, and absolute). With `mobilityIndexR`, the user specifies the transition matrix type without any need for further data manipulation. The second is calculating mobility indices derived from the transition matrix. To the authors' knowledge, there is no package which bundles together calculations of several mobility indices. The third is non-parametric hypothesis tests. While recent packages, e.g. @nptest, offer efficient implementations of non-parametric hypothesis tests, their use in this application requires a great deal of data manipulation on the part of the user. 
+This package combines three functionalities and tailors them to a social science and public policy setting. The first is generating transition matrices. While several recent packages, e.g. @markovchain, allow the user to calculate transition matrices from numeric data, the user must manually adjust the data so to create various types of transition matrices (relative, mixed, and absolute). With `mobilityIndexR`, the user specifies the transition matrix type without any need for further data manipulation. The second is calculating mobility indices derived from the transition matrix. To the authors' knowledge, there is no package which bundles together calculations of several mobility indices. The third is nonparametric hypothesis tests. While recent packages, e.g. @nptest, offer efficient implementations of nonparametric hypothesis tests, their use in this application requires a great deal of data manipulation on the part of the user. 
 
 # Examples
 
@@ -96,11 +96,11 @@ getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5",
 #> $wgm
 #> [1] 0.58
 ```
-Additionally, setting `intervals = TRUE` returns non-parametric bootstrap confidence intervals with a specified interval size and number of bootstrap iterations. See our [introductory vignette](https://cran.r-project.org/web/packages/mobilityIndexR/vignettes/intro-to-mobilityIndexR.html) for more information on using this feature.
+Additionally, setting `intervals = TRUE` returns nonparametric bootstrap confidence intervals with a specified interval size and number of bootstrap iterations. See our [introductory vignette](https://cran.r-project.org/web/packages/mobilityIndexR/vignettes/intro-to-mobilityIndexR.html) for more information on using this feature.
 
 ## Hypothesis Tests
 
-There are several cases where one may want to compare mobility indices between two samples. The function `getHypothesisTest` calculates non-parametric one-sided hypothesis tests for each index specified. Below, we compare the income mobility experienced between two time periods, e.g. $t_0$ to $t_3$ and $t_5$ to $t_8$. 
+There are several cases where one may want to compare mobility indices between two samples. The function `getHypothesisTest` calculates nonparametric one-sided hypothesis tests for each index specified. Below, we compare the income mobility experienced between two time periods, e.g. $t_0$ to $t_3$ and $t_5$ to $t_8$. 
 
 ```r
 getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility,
