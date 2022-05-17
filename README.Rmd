@@ -26,6 +26,13 @@ library(mobilityIndexR)
 
 `mobilityIndexR` allows users to both calculate transition matrices (relative, mixed, and absolute) as well as calculate and compare mobility indices (*Prais-Bibby*, *Average Movement*, *Weighted Group Mobility*, and *Origin Specific*).
 
+This package is used in our paper [Earnings mobility and the Great Recession](https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.13083).
+
+## Citation
+
+Please cite as follows:
+> Brett Mullins and Trevor Harkreader (2021). mobilityIndexR: Calculates Transition Matrices and Mobility Indices. Version x.y.z. Available at https://github.com/bcmullins/mobilityIndexR.
+
 ## Installation
 
 You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with:
@@ -41,7 +48,7 @@ devtools::install_github("bcmullins/mobilityIndexR")
 ```
 # Transition Matrices
 
-Two dimensional transition matrices are a tool for representing mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. Generally, this approach in some way ranks the observable value at each point in time and displays a contingency table with aggregated counts or proportions of each combination of ranks. `mobilityIndexR` offers three methods of constructing ranks using the `getTMatrix` function: relative, mixed, and absolute. 
+Two dimensional transition matrices are a tool for representing mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. Generally, this approach in some way ranks the observable value at each point in time and displays a contingency table with aggregated counts or proportions of each combination of ranks. `mobilityIndexR` offers three methods of constructing ranks using the `getTMatrix` function: relative, mixed, and absolute.
 
 As example data, we include three datasets: `mobilityIndexR::incomeMobility`, `mobilityIndexR::incomeZeroInfMobility`, and `mobilityIndexR::gradeMobility`. These datasets each contain 125 records, an "id" column, and observations of some value at ten points in time, denoted "t0", ..., "t9". `mobilityIndexR::incomeMobility` simulates income data over ten years; `mobilityIndexR::incomeZeroInfMobility` simulates income data over ten years that has an inflated number of zeros; and `mobilityIndexR::gradeMobility` simulates student grade data over ten assignments.
 
@@ -53,26 +60,26 @@ head(incomeMobility)
 
 Types of transition matrices differ by how values are binned into ranks. With relative transition matrices, values in each of the two specified columns (`col_x`, `col_y`) are binned into ranks as quantiles. The number of quantiles is specified in the `num_ranks` argument. Note: if one value in the data occurs more often than the size of the quantile ranks, then `getTMatrix` will throw an error.
 
-`getTMatrix` returns a list containing the transition matrix as well as the bounds used to bin the data into ranks. 
+`getTMatrix` returns a list containing the transition matrix as well as the bounds used to bin the data into ranks.
 
 ```{r relative_probsF}
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "relative", num_ranks = 5, probs = FALSE)
 ```
 
-The above example produces a $5 \times 5$ contingency table. Setting the argument `probs = TRUE`, we obtain a transition matrix with unconditional probabilities rather than counts. 
+The above example produces a $5 \times 5$ contingency table. Setting the argument `probs = TRUE`, we obtain a transition matrix with unconditional probabilities rather than counts.
 
 ```{r relative_probsT}
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "relative", num_ranks = 5, probs = TRUE)
 ```
 
 ## Mixed
 
-With mixed transition matrices, values in `col_x` are first binned into ranks as quantiles, then the bounds for `col_x` are used to bin `col_y` into ranks. In the example below, observe that `col_x_bounds` and `col_y_bounds` are equal except for the minimum and maximum values. 
+With mixed transition matrices, values in `col_x` are first binned into ranks as quantiles, then the bounds for `col_x` are used to bin `col_y` into ranks. In the example below, observe that `col_x_bounds` and `col_y_bounds` are equal except for the minimum and maximum values.
 
 ```{r mixed}
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "mixed", num_ranks = 5, probs = FALSE)
 ```
 
@@ -81,7 +88,7 @@ getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
 With absolute transition matrices, values in `col_x` and `col_y` are binned into ranks using user-specified bounds with the `bounds` argument.
 
 ```{r absolute}
-getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5",
            type = "absolute", probs = FALSE, bounds = c(0, 0.6, 0.7, 0.8, 0.9, 1.0))
 ```
 
@@ -90,11 +97,11 @@ getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5",
 Mobility indices are measures of mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. `mobilityIndexR` calculates indices using the `getMobilityIndices` function. By default, the `getMobilityIndices` returns all available indices. Note that `getMobilityIndices` can additionally return bootstrapped intervals for each of the indices.
 
 ```{r indices}
-getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5",
                    type = "relative", num_ranks = 5)
 ```
 
-Below is a brief description of the indices. Let $s(i)$ be the event that one is in rank $i$ at the first or starting point in time and $e(j)$ be the event that one is in rank $j$ at the second or ending point in time. Suppose $k$ is the largest rank in the data. 
+Below is a brief description of the indices. Let $s(i)$ be the event that one is in rank $i$ at the first or starting point in time and $e(j)$ be the event that one is in rank $j$ at the second or ending point in time. Suppose $k$ is the largest rank in the data.
 
 The *Prais-Bibby* index (`type = "prais_bibby"`) is the proportion of records that change ranks, i.e. $\Sigma_{i = 1}^kPr[s(i) \neq e(i)]$.
 
@@ -102,10 +109,10 @@ The *Average Mobility* index (`type = "average_movement"`) is the average number
 
 The *Weighted Group Mobility* index (`type = "wgm"`) is a weighted version of the proportion of records that change ranks, i.e. $k^{-1} \Sigma_{i = 1}^k \frac{Pr[\neg e(i) | s(i)]}{Pr[\neg e(i)]}$.
 
-There are four *Origin Specific* indices (`type = "origin_specific"`): top, bottom, top far, and bottom far. The top (bottom) index is the proportion of records that begin in the top (bottom) and end outside of the top (bottom). The far versions of these indices are the proportions of records that begin in the top (bottom) and end at least two ranks away from the top (bottom). 
+There are four *Origin Specific* indices (`type = "origin_specific"`): top, bottom, top far, and bottom far. The top (bottom) index is the proportion of records that begin in the top (bottom) and end outside of the top (bottom). The far versions of these indices are the proportions of records that begin in the top (bottom) and end at least two ranks away from the top (bottom).
 
 ```{r one_index}
-getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5",
                    type = "relative", num_ranks = 5, indices = "wgm")
 ```
 
@@ -113,10 +120,10 @@ A single index or subset of the indices can be returned by passing a string or v
 
 # Hypothesis Testing
 
-The function `getHypothesisTest` compares mobility indices across datasets. The user specifies two datasets (`dat_A`, `dat_B`) as well as a pair of columns from each dataset as a vector (`cols_A`, `cols_B`). This function performs a non-parametric one-sided hypothesis test that the index value for `dat_A` is greater than the index value for `dat_B`. The parameter `bootstrap_iter` specifies the number of bootstrap iterations; the default value is `100`. 
+The function `getHypothesisTest` compares mobility indices across datasets. The user specifies two datasets (`dat_A`, `dat_B`) as well as a pair of columns from each dataset as a vector (`cols_A`, `cols_B`). This function performs a non-parametric one-sided hypothesis test that the index value for `dat_A` is greater than the index value for `dat_B`. The parameter `bootstrap_iter` specifies the number of bootstrap iterations; the default value is `100`.
 
 ```{r hypothesis_test}
-getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility, 
+getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility,
                   cols_A = c("t0", "t3"), cols_B = c("t5", "t8"),
                   type = "relative", num_ranks = 5, bootstrap_iter = 100)
 ```
