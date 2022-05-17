@@ -28,11 +28,6 @@ library(mobilityIndexR)
 
 This package is used in our paper [Earnings mobility and the Great Recession](https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.13083).
 
-## Citation
-
-Please cite as follows:
-> Brett Mullins and Trevor Harkreader (2021). mobilityIndexR: Calculates Transition Matrices and Mobility Indices. Version x.y.z. Available at https://github.com/bcmullins/mobilityIndexR.
-
 ## Installation
 
 You can install the released version of mobilityIndexR from [CRAN](https://CRAN.R-project.org) with:
@@ -46,6 +41,13 @@ You can install the development version of mobilityIndexR from [Github](https://
 # install.packages("devtools")
 devtools::install_github("bcmullins/mobilityIndexR")
 ```
+
+## Citation
+
+Please cite as follows:
+
+> Brett Mullins and Trevor Harkreader (2021). mobilityIndexR: Calculates Transition Matrices and Mobility Indices. Version x.y.z. Available at https://github.com/bcmullins/mobilityIndexR.
+
 # Transition Matrices
 
 Two dimensional transition matrices are a tool for representing mobility within a group between two points in time with respect to some observable value such as income of workers or grades of students. Generally, this approach in some way ranks the observable value at each point in time and displays a contingency table with aggregated counts or proportions of each combination of ranks. `mobilityIndexR` offers three methods of constructing ranks using the `getTMatrix` function: relative, mixed, and absolute.

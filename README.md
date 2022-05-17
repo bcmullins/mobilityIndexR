@@ -16,6 +16,9 @@ status](https://www.r-pkg.org/badges/version/mobilityIndexR)](https://CRAN.R-pro
 mobility indices (*Prais-Bibby*, *Average Movement*, *Weighted Group
 Mobility*, and *Origin Specific*).
 
+This package is used in our paper [Earnings mobility and the Great
+Recession](https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.13083).
+
 ## Installation
 
 You can install the released version of mobilityIndexR from
@@ -32,6 +35,14 @@ You can install the development version of mobilityIndexR from
 # install.packages("devtools")
 devtools::install_github("bcmullins/mobilityIndexR")
 ```
+
+## Citation
+
+Please cite as follows:
+
+> Brett Mullins and Trevor Harkreader (2021). mobilityIndexR: Calculates
+> Transition Matrices and Mobility Indices. Version x.y.z. Available at
+> <https://github.com/bcmullins/mobilityIndexR>.
 
 # Transition Matrices
 
@@ -86,7 +97,7 @@ ranks, then `getTMatrix` will throw an error.
 the bounds used to bin the data into ranks.
 
 ``` r
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "relative", num_ranks = 5, probs = FALSE)
 #> $tmatrix
 #>    
@@ -111,7 +122,7 @@ the argument `probs = TRUE`, we obtain a transition matrix with
 unconditional probabilities rather than counts.
 
 ``` r
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "relative", num_ranks = 5, probs = TRUE)
 #> $tmatrix
 #>    
@@ -139,7 +150,7 @@ into ranks. In the example below, observe that `col_x_bounds` and
 `col_y_bounds` are equal except for the minimum and maximum values.
 
 ``` r
-getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = incomeMobility, col_x = "t0", col_y = "t5",
            type = "mixed", num_ranks = 5, probs = FALSE)
 #> $tmatrix
 #>    
@@ -166,7 +177,7 @@ binned into ranks using user-specified bounds with the `bounds`
 argument.
 
 ``` r
-getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5", 
+getTMatrix(dat = gradeMobility, col_x = "t0", col_y = "t5",
            type = "absolute", probs = FALSE, bounds = c(0, 0.6, 0.7, 0.8, 0.9, 1.0))
 #> $tmatrix
 #>    
@@ -194,7 +205,7 @@ returns all available indices. Note that `getMobilityIndices` can
 additionally return bootstrapped intervals for each of the indices.
 
 ``` r
-getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5",
                    type = "relative", num_ranks = 5)
 #> $average_movement
 #> [1] 0.64
@@ -241,7 +252,7 @@ of records that begin in the top (bottom) and end at least two ranks
 away from the top (bottom).
 
 ``` r
-getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5", 
+getMobilityIndices(dat = incomeMobility, col_x = "t0", col_y = "t5",
                    type = "relative", num_ranks = 5, indices = "wgm")
 #> $wgm
 #> [1] 0.58
@@ -261,26 +272,26 @@ The parameter `bootstrap_iter` specifies the number of bootstrap
 iterations; the default value is `100`.
 
 ``` r
-getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility, 
+getHypothesisTest(dat_A = incomeMobility, dat_B = incomeMobility,
                   cols_A = c("t0", "t3"), cols_B = c("t5", "t8"),
                   type = "relative", num_ranks = 5, bootstrap_iter = 100)
 #> $prais_bibby
-#> [1] 0.31
+#> [1] 0.37
 #> 
 #> $average_movement
-#> [1] 0.52
-#> 
-#> $wgm
-#> [1] 0.33
-#> 
-#> $os_total_top
 #> [1] 0.55
 #> 
+#> $wgm
+#> [1] 0.4
+#> 
+#> $os_total_top
+#> [1] 0.69
+#> 
 #> $os_far_top
-#> [1] 0.94
+#> [1] 0.96
 #> 
 #> $os_total_bottom
-#> [1] 0.37
+#> [1] 0.36
 #> 
 #> $os_far_bottom
 #> [1] 0
